@@ -1,36 +1,44 @@
 const express = require("express");
 const { Pool } = require("pg");
-require("dotenv").config();
+const studentRoutes = require("./routes/studentRoutes");
 
 const app = express();
-const port = 3000;
 
-// PostgreSQL connection configuration
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+// Middleware
+app.use(express.json()); // Parse JSON bodies
+
+// Routes
+
+app.use("/students", studentRoutes); // Mount studentRoutes under the '/students' path
+
+app.use("/", async (req, res) => {
+  try {
+    console.log("Welcome to localhost 3000");
+    res.send("Welcome to localhost 3000");
+  } catch (error) {
+    console.error("Error: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 });
 
-// Test endpoint
-app.get("/", async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query("SELECT $1::text as message", [
-      "Hello world!",
-    ]);
-    const message = result.rows[0].message;
-    res.send(message);
-    client.release();
-  } catch (err) {
-    console.error("Error executing query", err);
-    res.status(500).send("Error executing query");
+const pool = new Pool({
+  user: "postgres",
+  host: "localhost",
+  database: "IDScan",
+  password: "1111",
+  port: 5432, // Default PostgreSQL port
+});
+
+pool.connect((err, client, done) => {
+  if (err) {
+    console.error("Error connecting to the database:", err);
+  } else {
+    console.log("Connected successfully to the database!");
   }
 });
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
