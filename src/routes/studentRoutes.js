@@ -32,18 +32,26 @@ router.post("/login", async (req, res) => {
 });
 
 // POST route to create a new student
-router.post("/", async (req, res) => {
-  const { username, email } = req.body;
+router.post("/register", async (req, res) => {
+  const { first_name, last_name, email, date_of_birth, phone_number } =
+    req.body;
 
   try {
-    const newStudent = await Student.create({ username, email });
+    // Create a new student instance with the provided data
+    const newStudent = await Student.create({
+      first_name,
+      last_name,
+      email,
+      date_of_birth,
+      phone_number,
+    });
+
+    // Respond with the newly created student data
     res.status(201).json(newStudent);
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating student:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// Other routes...
 
 module.exports = router;
