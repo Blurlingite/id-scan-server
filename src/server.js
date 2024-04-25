@@ -1,4 +1,3 @@
-// add commeent
 const express = require("express");
 const { Pool } = require("pg");
 const studentRoutes = require("./routes/studentRoutes");
