@@ -28,14 +28,11 @@ const Student = sequelize.define(
         isEmail: true, // Validates email format
       },
     },
-    date_of_birth: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-
-    phone_number: {
+    password: {
       type: DataTypes.STRING,
-    },
+      allowNull: false,
+      unique: false,
+    }
   },
   {
     // Additional model options

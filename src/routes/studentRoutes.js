@@ -8,15 +8,19 @@ const Student = require("../models/Student");
 // using first name as passsword for now
 router.post("/login", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     // Check if email is provided
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
     }
 
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
+    }
+
     // Find the user by email
-    const student = await Student.findOne({ where: { email } });
+    const student = await Student.findOne({ where: { email, password } });
 
     // Check if user exists
     if (!student) {
@@ -33,7 +37,7 @@ router.post("/login", async (req, res) => {
 
 // POST route to create a new student
 router.post("/register", async (req, res) => {
-  const { first_name, last_name, email, date_of_birth, phone_number } =
+  const { first_name, last_name, email, password } =
     req.body;
 
   try {
@@ -42,8 +46,7 @@ router.post("/register", async (req, res) => {
       first_name,
       last_name,
       email,
-      date_of_birth,
-      phone_number,
+      password,
     });
 
     // Respond with the newly created student data
