@@ -1,13 +1,33 @@
 const express = require("express");
 const { Pool } = require("pg");
 const studentRoutes = require("./routes/studentRoutes");
+const os = require("os");
 
 const app = express();
+
+let ipAddress = "";
 
 // Middleware
 app.use(express.json()); // Parse JSON bodies
 
 // Routes
+
+// get the ip address this server runs on
+app.get("/api/get-ip", (req, res) => {
+  const networkInterfaces = os.networkInterfaces();
+
+  for (const interface of Object.values(networkInterfaces)) {
+    for (const config of interface) {
+      if (config.family === "IPv4" && !config.internal) {
+        ipAddress = config.address;
+        break;
+      }
+    }
+    if (ipAddress) break;
+  }
+
+  res.json({ ip: ipAddress });
+});
 
 app.use("/students", studentRoutes); // Mount studentRoutes under the '/students' path
 
@@ -39,6 +59,18 @@ pool.connect((err, client, done) => {
 
 // Start the server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on http://${getLocalIP()}:${PORT}`);
 });
+
+function getLocalIP() {
+  const os = require("os");
+  const networkInterfaces = os.networkInterfaces();
+  for (const interface of Object.values(networkInterfaces)) {
+    for (const config of interface) {
+      if (config.family === "IPv4" && !config.internal) {
+        return config.address;
+      }
+    }
+  }
+}
