@@ -2,6 +2,8 @@ const express = require("express");
 const { Pool } = require("pg");
 const studentRoutes = require("./routes/studentRoutes");
 const professorRoutes = require("./routes/professorRoutes");
+const courseRoutes = require("./routes/courseRoutes");
+const professor_course_student_routes = require("./routes/professor_course_student_routes");
 
 const os = require("os");
 
@@ -33,6 +35,8 @@ app.get("/api/get-ip", (req, res) => {
 
 app.use("/students", studentRoutes); // Mount studentRoutes under the '/students' path
 app.use("/professors", professorRoutes); 
+app.use("/courses", courseRoutes); 
+app.use("/professor_course_student_routes", professor_course_student_routes); 
 
 app.use("/", async (req, res) => {
   try {
