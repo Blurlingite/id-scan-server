@@ -5,7 +5,6 @@ const router = express.Router();
 const Student = require("../models/Student");
 
 // POST route to login an existing student
-// using first name as passsword for now
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;

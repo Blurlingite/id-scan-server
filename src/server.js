@@ -1,6 +1,8 @@
 const express = require("express");
 const { Pool } = require("pg");
 const studentRoutes = require("./routes/studentRoutes");
+const professorRoutes = require("./routes/professorRoutes");
+
 const os = require("os");
 
 const app = express();
@@ -30,6 +32,7 @@ app.get("/api/get-ip", (req, res) => {
 });
 
 app.use("/students", studentRoutes); // Mount studentRoutes under the '/students' path
+app.use("/professors", professorRoutes); 
 
 app.use("/", async (req, res) => {
   try {
