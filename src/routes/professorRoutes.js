@@ -39,4 +39,28 @@ router.post("/login", async (req, res) => {
     }
   });
 
+  // POST route to create a new professor
+router.post("/register", async (req, res) => {
+  const { professor_id, first_name, last_name, email, password } =
+    req.body;
+
+  try {
+    // Create a new professor instance with the provided data
+    const newProfessor = await Professor.create({
+      professor_id,
+      first_name,
+      last_name,
+      email,
+      password,
+    });
+
+    // Respond with the newly created professor data
+    res.status(201).json(newProfessor);
+  } catch (error) {
+    console.error("Error creating student:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
   module.exports = router;
