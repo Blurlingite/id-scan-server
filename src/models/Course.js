@@ -4,21 +4,10 @@ const sequelize = require("../config/db");
 const Course = sequelize.define(
   "Course",
   {
-    // Define schema attributes
-    course_abbr: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true, // course_abbr as part of the composite primary key
-    },
     course_code: {
       type: DataTypes.STRING,
       allowNull: false,
       primaryKey: true, // course_code as part of the composite primary key
-    },
-    course_section: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      primaryKey: true, // course_section as part of the composite primary key
     },
     course_name: {
       type: DataTypes.STRING,

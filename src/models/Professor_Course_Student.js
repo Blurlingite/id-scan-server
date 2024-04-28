@@ -9,15 +9,7 @@ const Professor_Course_Student = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    course_abbr: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     course_code: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    course_section: {
       type: DataTypes.STRING,
       allowNull: false,
     },
