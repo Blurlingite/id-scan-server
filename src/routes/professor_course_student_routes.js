@@ -81,4 +81,39 @@ router.get('/course/students/:course_code', async (req, res) => {
   }
 });
 
+// get all courses by student_id
+router.get('/courses/:student_id', async (req, res) => {
+  try {
+    const student_id = req.params.student_id;
+
+    // Check if student_id is provided
+    if (!student_id) {
+      return res.status(400).json({ error: 'Missing student_id parameter' });
+    }
+
+    // Query the database to find courses associated with the student ID
+    const studentCourses = await Professor_Course_Student.findAll({
+      where: { student_id: student_id },
+      include: [{ model: Course, attributes: ['course_code', 'course_name', 'start_time', 'end_time', 'professor_id'] }] // Include Course model to retrieve course details
+    });
+
+    // Extract course information from the results
+    const courses = studentCourses.map(professorCourseStudent => {
+      return {
+        course_code: professorCourseStudent.Course.course_code,
+        course_name: professorCourseStudent.Course.course_name,
+        start_time: professorCourseStudent.Course.start_time,
+        end_time: professorCourseStudent.Course.end_time
+      };
+    });
+
+    // Return the courses associated with the student
+    res.json(courses);
+  } catch (error) {
+    console.error("Error fetching courses:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 module.exports = router;
